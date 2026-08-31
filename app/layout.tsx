@@ -11,7 +11,7 @@ import './vintage.css';
 import './broadsheet.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://wallynftstaging4.vercel.app'),
+  metadataBase: new URL('https://wallynftproduction.vercel.app'),
   title: 'The Daily Times Journal Bulletin: WALLY NFT',
   description:
     'A special television bulletin from Wally and 1,000 leaders working to bring the real world onchain through fair, open RWA markets.',

@@ -52,7 +52,7 @@ export async function POST(request: Request) {
                 utm_source: 'wally-nft',
                 utm_medium: 'website',
                 utm_campaign: 'heard_from_the_herd',
-                referring_site: 'https://wallynftstaging4.vercel.app',
+                referring_site: 'https://wallynftproduction.vercel.app',
               }),
               cache: 'no-store',
             },
