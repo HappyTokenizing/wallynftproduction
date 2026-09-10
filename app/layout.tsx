@@ -14,10 +14,10 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://wallynftproduction.vercel.app'),
   title: 'The Daily Times Journal Bulletin: WALLY NFT',
   description:
-    'A special television bulletin from Wally and 1,000 leaders working to bring the real world onchain through fair, open RWA markets.',
+    'A special television bulletin from Wally and 2,000 NFT holders working to bring the real world onchain through fair, open RWA markets.',
   openGraph: {
     title: 'The Daily Times Journal Bulletin: WALLY NFT',
-    description: '1,000 leaders. One mission. Bring the real world onchain.',
+    description: '2,000 NFT holders. One mission. Bring the real world onchain.',
     type: 'website',
     images: [
       {
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'The Daily Times Journal Bulletin: WALLY NFT',
-    description: '1,000 leaders. One mission. Bring the real world onchain.',
+    description: '2,000 NFT holders. One mission. Bring the real world onchain.',
     images: ['/og.png'],
   },
   icons: {

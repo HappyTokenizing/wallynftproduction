@@ -66,8 +66,9 @@ const tierOrder = ['All', 'Common', 'Uncommon', 'Rare', 'Epic', '1 of 1'];
 const editionSections = [
   ['story', 'Front Page', 'Lead Story'],
   ['world', 'World Desk', 'Real Assets'],
-  ['herd', 'Special Report', 'The 1,000'],
+  ['herd', 'Special Report', 'The 2,000'],
   ['registry', 'Classifieds', 'Collection Index'],
+  ['benefits', 'Membership', 'NFT Benefits'],
   ['activations', 'Public Square', 'Dispatches'],
 ] as const;
 const worldDeskStories = [
@@ -209,7 +210,7 @@ export default function Home() {
         >
           <div className="newspaper-flag">
             <span>ALL THE NEWS THAT FITS THE ONCHAIN ERA</span>
-            <span>SPECIAL DIGITAL EDITION · 1,000 LEADERS</span>
+            <span>SPECIAL DIGITAL EDITION · 2,000 NFT HOLDERS</span>
           </div>
           <div className="newspaper-masthead">
             <p>Independent dispatches from the onchain frontier</p>
@@ -235,7 +236,7 @@ export default function Home() {
           <div className="front-headline">
             <p>BREAKING NEWS!</p>
             <h2 id="front-page-title">
-              Wally rallies 1,000 leaders for a fair onchain world.
+              Wally rallies 2,000 NFT holders for a fair onchain world.
             </h2>
             <strong>
               A mission driven collection carries real world value into a more
@@ -254,7 +255,7 @@ export default function Home() {
                 priority
               />
               <figcaption>
-                Five leaders answer the call · The RWA Herd is 1,000 strong
+                Five leaders answer the call · The RWA Herd is 2,000 strong
               </figcaption>
             </figure>
 
@@ -270,7 +271,7 @@ export default function Home() {
                 more open, transparent, and useful when the real world moves
                 onchain responsibly.
               </p>
-              <a href="#herd">Meet the 1,000 leaders</a>
+              <a href="#herd">Meet the 2,000 NFT holders</a>
             </article>
 
             <aside className="front-briefs" aria-label="Mission at a glance">
@@ -360,14 +361,14 @@ export default function Home() {
         >
           <div className="section-rule">
             <span>CONTINUED FROM FRONT PAGE</span>
-            <span>Special Report: The 1,000</span>
+            <span>Special Report: The 2,000</span>
           </div>
           <div className="herd-lead">
             <div className="herd-number" aria-hidden="true">
-              1,000
+              2,000
             </div>
             <div>
-              <p>ONE FIXED GENESIS COLLECTION</p>
+              <p>2,000 NFT HOLDERS · ONE COMMUNITY</p>
               <h2 id="herd-title">
                 Not spectators.
                 <br />
@@ -379,7 +380,8 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="rarity-table" aria-label="Collection rarity">
+          <p className="sample-rarity-label">Rarity in the sample collection</p>
+          <div className="rarity-table" aria-label="Sample collection rarity">
             {collection.distribution.map((entry) => (
               <div key={entry.tier}>
                 <span>{entry.tier}</span>
@@ -404,7 +406,7 @@ export default function Home() {
           </div>
           <div className="collection-heading">
             <div>
-              <p>THE GENESIS REGISTRY · RECORDS 0001 TO 1000</p>
+              <p>SAMPLE REGISTRY · RECORDS 0001 TO 1000</p>
               <h2 id="registry-title">The Wally Classifieds</h2>
               <small className="sample-collection-note">sample collection</small>
             </div>
@@ -518,9 +520,57 @@ export default function Home() {
               Show more leaders
             </button>
           )}
-          <a className="page-turn" href="#newsletter">
-            Receive the Herd Dispatch <span aria-hidden="true">→</span>
+          <a className="page-turn" href="#benefits">
+            Discover the NFT benefits <span aria-hidden="true">→</span>
           </a>
+        </section>
+
+        <section
+          className="benefits-edition"
+          id="benefits"
+          aria-labelledby="benefits-title"
+        >
+          <div className="section-rule">
+            <span>THE MEMBERS’ EDITION</span>
+            <span>A place in the herd</span>
+          </div>
+          <div className="benefits-heading">
+            <h2 id="benefits-title">Why own a WALLY NFT?</h2>
+            <p>A community of believers in open and fair onchain markets for all.</p>
+          </div>
+          <div className="benefits-columns">
+            <div>
+              <article>
+                <p className="benefit-kicker">01 · AIRDROPS</p>
+                <h3>Something for the holders</h3>
+                <p>Access to planned airdrops for eligible WALLY NFT holders.</p>
+              </article>
+              <article>
+                <p className="benefit-kicker">02 · PARTNER PERKS</p>
+                <h3>Benefits across the RWA sector</h3>
+                <p>Perks on participating partners’ products and services, connecting holders with more of the RWA world.</p>
+              </article>
+              <article>
+                <p className="benefit-kicker">03 · SPECIAL CONTENT</p>
+                <h3>A closer look at RWAs</h3>
+                <p>Access to special content created for the WALLY community.</p>
+              </article>
+            </div>
+            <div>
+              <article>
+                <p className="benefit-kicker">04 · NFT-ONLY COMMUNITY</p>
+                <h3>Your place in the herd</h3>
+                <p>Join an NFT-only community to connect with fellow holders and RWA pioneers who share your belief in a more open financial world.</p>
+              </article>
+              <article>
+                <p className="benefit-kicker">05 · THE FOUNDATION</p>
+                <h3>Support what you believe in</h3>
+                <p>Help support the RWA Foundation’s mission of open and fair onchain markets for all.</p>
+              </article>
+              <p className="benefits-pullquote">A community of believers.<br />A tool that connects and rewards.</p>
+            </div>
+          </div>
+          <p className="benefits-note">Holder benefits are planned. Airdrop eligibility, participating partners, content access and availability will be announced.</p>
         </section>
 
         <section
@@ -638,7 +688,7 @@ export default function Home() {
             Collection launch details and the first public activations will be
             announced here soon.
           </DialogDescription>
-          <p>LAUNCH APPROACHING · 1,000 LEADERS</p>
+          <p>LAUNCH APPROACHING · 2,000 NFT HOLDERS</p>
           <DialogClose className="edition-dialog-close">
             Return to the paper
           </DialogClose>
