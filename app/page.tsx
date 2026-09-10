@@ -219,7 +219,7 @@ export default function Home() {
           </div>
           <div className="newspaper-date-line">
             <span>VOL. I · NO. 001</span>
-            <span>SUNDAY, AUGUST 30, 2026</span>
+            <span>TUESDAY, SEPTEMBER 22, 2026</span>
             <span>PRICE: CONVICTION</span>
           </div>
 

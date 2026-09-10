@@ -39,7 +39,7 @@ export function NewsletterPopup() {
         // If storage is unavailable, the timed invitation may still appear.
       }
       setOpen(true);
-    }, 30_000);
+    }, 60_000);
     return () => window.clearTimeout(timer);
   }, []);
 
