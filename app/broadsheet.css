@@ -573,6 +573,7 @@ html {
 }
 
 .rarity-table {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   border-bottom: 4px double var(--news-ink);
 }
 

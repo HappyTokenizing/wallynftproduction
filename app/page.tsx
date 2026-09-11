@@ -21,8 +21,6 @@ type Wally = {
   name: string;
   image: string;
   tier: string;
-  rank: number;
-  score: number;
   color: string | null;
   hat: string | null;
   tusk: string | null;
@@ -45,14 +43,14 @@ type CollectionData = {
 
 const collection = collectionPayload as CollectionData;
 const featuredNumbers = [
-  '0001',
-  '0003',
-  '0014',
-  '0027',
-  '0140',
-  '0280',
-  '0296',
-  '0347',
+  '1400',
+  '0008',
+  '0071',
+  '0194',
+  '0220',
+  '0023',
+  '0400',
+  '0510',
 ] as const;
 const featuredOrder = new Map<string, number>(
   featuredNumbers.map((number, index) => [number, index]),
@@ -62,7 +60,10 @@ const orderedCollectionItems = [...collection.items].sort((a, b) => {
   const bOrder = featuredOrder.get(b.number) ?? Number.MAX_SAFE_INTEGER;
   return aOrder - bOrder;
 });
-const tierOrder = ['All', 'Common', 'Uncommon', 'Rare', 'Epic', '1 of 1'];
+const tierOrder = [
+  'All',
+  ...collection.distribution.map((entry) => entry.tier),
+];
 const editionSections = [
   ['story', 'Front Page', 'Lead Story'],
   ['world', 'World Desk', 'Real Assets'],
@@ -73,15 +74,15 @@ const editionSections = [
 ] as const;
 const worldDeskStories = [
   {
-    src: '/editorial/bridge-elephant-laurel-wally.png',
-    alt: 'A real elephant with a full color laurel wreath Wally NFT head at a 1943 bridge construction site',
+    src: '/editorial/final6-bridge.webp',
+    alt: 'A real elephant with a lilac laurel wreath Wally NFT head at a 1943 bridge construction site',
     desk: 'INFRASTRUCTURE',
     title: 'The rails, bridges, and public works that hold value together.',
     copy: 'Real world assets begin with the systems people rely on every day. Onchain markets can widen how that value is understood and accessed.',
     credit: 'Library of Congress · FSA/OWI · 1943',
   },
   {
-    src: '/editorial/wall-street-elephant-top-hat-wally-v2.png',
+    src: '/editorial/final6-wall.webp',
     alt: 'A real elephant with a full color top hat Wally NFT head on Wall Street in 1917',
     desk: 'MARKETS',
     title: 'Old markets meet open rails.',
@@ -89,16 +90,16 @@ const worldDeskStories = [
     credit: 'Library of Congress · 1917',
   },
   {
-    src: '/editorial/grain-boats-elephant-wally.png',
-    alt: 'A real elephant with a full color winter hat Wally NFT head beside grain elevators in 1943',
+    src: '/editorial/final6-grain.webp',
+    alt: 'A real elephant with a blue Wally NFT head in a turquoise beanie beside grain elevators in 1943',
     desk: 'COMMERCE',
     title: 'Goods move. Ownership can move better.',
     copy: 'Trade, inventory, and productive assets belong in a more connected system.',
     credit: 'Library of Congress · FSA/OWI · 1943',
   },
   {
-    src: '/editorial/housing-elephant-wally.png',
-    alt: 'A real elephant with a full color crowned Wally NFT head near prefabricated housing in 1941',
+    src: '/editorial/final6-housing.webp',
+    alt: 'A real elephant with a lavender glitter Wally NFT head with a gold crown near prefabricated housing in 1941',
     desk: 'HOUSING',
     title: 'The onchain world must still serve the real one.',
     copy: 'Technology matters when it improves access to the assets that shape daily life.',
@@ -247,7 +248,7 @@ export default function Home() {
           <div className="front-grid">
             <figure className="front-portrait">
               <Image
-                src="/editorial/breaking-news-wally-herd-v2.png"
+                src="/editorial/final6-hero.webp"
                 alt="Five real black and white elephants with distinct full color Wally NFT heads, led by Rainbow Wally"
                 width={1536}
                 height={1024}
@@ -380,8 +381,8 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <p className="sample-rarity-label">Rarity in the sample collection</p>
-          <div className="rarity-table" aria-label="Sample collection rarity">
+          <p className="sample-rarity-label">Inside the collection</p>
+          <div className="rarity-table" aria-label="Collection editions">
             {collection.distribution.map((entry) => (
               <div key={entry.tier}>
                 <span>{entry.tier}</span>
@@ -402,15 +403,17 @@ export default function Home() {
         >
           <div className="section-rule inverse">
             <span>THE COLLECTION INDEX</span>
-            <span>Archive &amp; Rarity</span>
+            <span>Archive &amp; Editions</span>
           </div>
           <div className="collection-heading">
             <div>
-              <p>SAMPLE REGISTRY · RECORDS 0001 TO 1000</p>
+              <p>COLLECTION REGISTRY · RECORDS 0001 TO 2000</p>
               <h2 id="registry-title">The Wally Classifieds</h2>
-              <small className="sample-collection-note">sample collection</small>
+              <small className="sample-collection-note">
+                Collection preview · Not yet minted
+              </small>
             </div>
-            <p>Search by number, color, hat, tusk, or rarity.</p>
+            <p>Search by number, color, hat, tusk, or edition.</p>
           </div>
 
           <div className="collection-tools">
@@ -426,7 +429,7 @@ export default function Home() {
                 aria-label="Search the Wally collection"
               />
             </label>
-            <div className="edition-tabs" aria-label="Filter by rarity">
+            <div className="edition-tabs" aria-label="Filter by edition">
               {tierOrder.map((tier) => (
                 <button
                   type="button"
@@ -474,6 +477,7 @@ export default function Home() {
                 <div className="edition-card-image">
                   <Image
                     src={item.image}
+                    unoptimized
                     alt={`${item.name}: ${item.color ?? 'special color'}, ${item.hat ?? 'special headwear'}`}
                     width={600}
                     height={600}
@@ -485,7 +489,7 @@ export default function Home() {
                 </div>
                 <div className="edition-card-copy">
                   <h3>{item.name}</h3>
-                  <p>Rank {String(item.rank).padStart(4, '0')}</p>
+                  <p>No. {item.number}</p>
                   <dl>
                     <div>
                       <dt>Color</dt>
@@ -536,41 +540,63 @@ export default function Home() {
           </div>
           <div className="benefits-heading">
             <h2 id="benefits-title">Why own a WALLY NFT?</h2>
-            <p>A community of believers in open and fair onchain markets for all.</p>
+            <p>
+              A community of believers in open and fair onchain markets for all.
+            </p>
           </div>
           <div className="benefits-columns">
             <div>
               <article>
                 <p className="benefit-kicker">01 · AIRDROPS</p>
                 <h3>Something for the holders</h3>
-                <p>Access to planned airdrops for eligible WALLY NFT holders.</p>
+                <p>
+                  Access to planned airdrops for eligible WALLY NFT holders.
+                </p>
               </article>
               <article>
                 <p className="benefit-kicker">02 · PARTNER PERKS</p>
                 <h3>Benefits across the RWA sector</h3>
-                <p>Perks on participating partners’ products and services, connecting holders with more of the RWA world.</p>
+                <p>
+                  Perks on participating partners’ products and services,
+                  connecting holders with more of the RWA world.
+                </p>
               </article>
               <article>
                 <p className="benefit-kicker">03 · SPECIAL CONTENT</p>
                 <h3>A closer look at RWAs</h3>
-                <p>Access to special content created for the WALLY community.</p>
+                <p>
+                  Access to special content created for the WALLY community.
+                </p>
               </article>
             </div>
             <div>
               <article>
                 <p className="benefit-kicker">04 · NFT-ONLY COMMUNITY</p>
                 <h3>Your place in the herd</h3>
-                <p>Join an NFT-only community to connect with fellow holders and RWA pioneers who share your belief in a more open financial world.</p>
+                <p>
+                  Join an NFT-only community to connect with fellow holders and
+                  RWA pioneers who share your belief in a more open financial
+                  world.
+                </p>
               </article>
               <article>
                 <p className="benefit-kicker">05 · THE FOUNDATION</p>
                 <h3>Support what you believe in</h3>
-                <p>Help support the RWA Foundation’s mission of open and fair onchain markets for all.</p>
+                <p>
+                  Help support the RWA Foundation’s mission of open and fair
+                  onchain markets for all.
+                </p>
               </article>
-              <p className="benefits-pullquote">A community of believers.<br />A tool that connects and rewards.</p>
+              <p className="benefits-pullquote">
+                A community of believers.
+                <br />A tool that connects and rewards.
+              </p>
             </div>
           </div>
-          <p className="benefits-note">Holder benefits are planned. Airdrop eligibility, participating partners, content access and availability will be announced.</p>
+          <p className="benefits-note">
+            Holder benefits are planned. Airdrop eligibility, participating
+            partners, content access and availability will be announced.
+          </p>
         </section>
 
         <section
@@ -641,7 +667,8 @@ export default function Home() {
 
         <section className="edition-signoff">
           <Image
-            src="/collection/0510.webp"
+            src="/collection/final6/0510.webp"
+            unoptimized
             alt="Wally leader No. 0510"
             width={600}
             height={600}

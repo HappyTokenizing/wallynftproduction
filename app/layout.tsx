@@ -17,22 +17,24 @@ export const metadata: Metadata = {
     'A special television bulletin from Wally and 2,000 NFT holders working to bring the real world onchain through fair, open RWA markets.',
   openGraph: {
     title: 'The Daily Times Journal Bulletin: WALLY NFT',
-    description: '2,000 NFT holders. One mission. Bring the real world onchain.',
+    description:
+      '2,000 NFT holders. One mission. Bring the real world onchain.',
     type: 'website',
     images: [
       {
-        url: '/og.png',
-        width: 1719,
-        height: 900,
-        alt: 'The Daily Times Journal Bulletin: The real world is coming onchain',
+        url: '/editorial/final6-hero.webp',
+        width: 1568,
+        height: 1003,
+        alt: 'The WALLY herd, led by the Rainbow Gradient 1-of-1',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'The Daily Times Journal Bulletin: WALLY NFT',
-    description: '2,000 NFT holders. One mission. Bring the real world onchain.',
-    images: ['/og.png'],
+    description:
+      '2,000 NFT holders. One mission. Bring the real world onchain.',
+    images: ['/editorial/final6-hero.webp'],
   },
   icons: {
     icon: '/wally-logo-mark.png',

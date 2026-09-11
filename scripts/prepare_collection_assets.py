@@ -1,105 +1,76 @@
+"""Build the public Final Collection 6 gallery without flattening transparency."""
 from __future__ import annotations
-
+import argparse
+import csv
 import json
-from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-
-from PIL import Image
-
+from PIL import Image, ImageChops
 
 PROJECT = Path(__file__).resolve().parents[1]
-PLAN = Path(
-    "/Users/herwig/Documents/Codex/2026-08-29/are/work/"
-    "nft_rarity_workbook/mint-plan.json"
-)
-COLLECTION = Path(
-    "/Users/herwig/Desktop/WALLY NFT final pngs high resolution/Draft Collection 3"
-)
-OUTPUT = PROJECT / "public" / "collection"
-
-
-def choose_diverse(rows: list[dict], tier: str, count: int, chosen: list[dict]) -> list[dict]:
-    candidates = [row for row in rows if row["Overall Tier"] == tier]
-    selected: list[dict] = []
-    seen = {
-        "Color": {row.get("Color") for row in chosen},
-        "Hat": {row.get("Hat") for row in chosen},
-        "Tusk": {row.get("Tusk") for row in chosen},
-    }
-    while candidates and len(selected) < count:
-        def diversity(row: dict) -> tuple[int, int, int]:
-            new_traits = sum(row[key] not in seen[key] for key in seen)
-            return (new_traits, int(row["Rarity Score"]), -int(row["Token ID"]))
-
-        winner = max(candidates, key=diversity)
-        candidates.remove(winner)
-        selected.append(winner)
-        for key in seen:
-            seen[key].add(winner[key])
-    return selected
 
 
 def main() -> None:
-    rows = json.loads(PLAN.read_text(encoding="utf-8"))["rows"]
-    chosen = rows
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--collection', type=Path, required=True)
+    parser.add_argument('--workers', type=int, default=4)
+    args = parser.parse_args()
+    rows = list(csv.DictReader((args.collection / 'Collection Manifest.csv').open(newline='')))
+    rows.sort(key=lambda row: int(row['token_id']))
+    if [int(row['token_id']) for row in rows] != list(range(1, 2001)):
+        raise ValueError('Expected exactly the 2,000 unique Final Collection 6 token IDs.')
+    if sum(row['edition'] == '1 of 1' for row in rows) != 10:
+        raise ValueError('Expected ten 1-of-1 editions.')
+    output = PROJECT / 'public/collection/final6'
+    output.mkdir(parents=True, exist_ok=True)
 
-    ranking = sorted(
-        rows,
-        key=lambda row: (
-            row["Type"] == "1 of 1",
-            int(row["Rarity Score"]),
-            int(row["Rare+ Trait Count"]),
-            -int(row["Token ID"]),
-        ),
-        reverse=True,
-    )
-    rank_by_id = {int(row["Token ID"]): rank for rank, row in enumerate(ranking, start=1)}
-
-    OUTPUT.mkdir(parents=True, exist_ok=True)
-    records = []
-    for row in sorted(chosen, key=lambda item: int(item["Token ID"])):
-        token_id = int(row["Token ID"])
-        source = COLLECTION / f"{token_id:04d}.png"
+    def prepare(row: dict) -> dict:
+        token_id = int(row['token_id'])
+        source = args.collection / row['filename']
+        if source.parent != args.collection or not source.is_file():
+            raise ValueError(f'Invalid manifest source: {source}')
+        before = source.stat()
         with Image.open(source) as image:
-            image = image.convert("RGB")
-            image.thumbnail((560, 560), Image.Resampling.LANCZOS)
-            destination = OUTPUT / f"{token_id:04d}.webp"
-            image.save(destination, "WEBP", quality=86, method=6)
+            if image.size != (4096, 4096) or image.mode != 'RGBA':
+                raise ValueError(f'Unexpected source format: {source.name}')
+            image = image.resize((600, 600), Image.Resampling.LANCZOS)
+            destination = output / f'{token_id:04d}.webp'
+            image.save(destination, 'WEBP', quality=90, exact=True, method=4)
+            with Image.open(destination) as saved:
+                if ImageChops.difference(image.getchannel('A'), saved.convert('RGBA').getchannel('A')).getbbox():
+                    raise ValueError(f'Transparency verification failed: {destination.name}')
+        after = source.stat()
+        if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
+            raise ValueError(f'Source changed during export: {source.name}; rerun the export.')
+        unique = row['edition'] == '1 of 1'
+        return {
+            'id': token_id, 'number': f'{token_id:04d}',
+            'name': row['color'] if unique else f'Wally #{token_id:04d}',
+            'image': f'/collection/final6/{token_id:04d}.webp',
+            'tier': row['edition'], 'color': row['color'],
+            'hat': None if unique else row['hat'],
+            'tusk': None if unique else row['tusk'], 'oneOfOne': unique,
+        }
 
-        one_of_one = row["Type"] == "1 of 1"
-        records.append(
-            {
-                "id": token_id,
-                "number": f"{token_id:04d}",
-                "name": row["One of One"] if one_of_one else f"Wally #{token_id:04d}",
-                "image": f"/collection/{token_id:04d}.webp",
-                "tier": row["Overall Tier"],
-                "rank": rank_by_id[token_id],
-                "score": int(row["Rarity Score"]),
-                "color": None if one_of_one else row["Color"],
-                "hat": None if one_of_one else row["Hat"],
-                "tusk": None if one_of_one else row["Tusk"],
-                "oneOfOne": one_of_one,
-            }
-        )
-
+    records = []
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        for record in pool.map(prepare, rows):
+            records.append(record)
+            if len(records) % 250 == 0:
+                print(f'Exported and verified {len(records)}/2000', flush=True)
     payload = {
-        "totalSupply": 1000,
-        "previewCount": len(records),
-        "distribution": [
-            {"tier": "Common", "count": 388, "percent": 38.8, "color": "#d8e3dc"},
-            {"tier": "Uncommon", "count": 473, "percent": 47.3, "color": "#8de0a6"},
-            {"tier": "Rare", "count": 129, "percent": 12.9, "color": "#71c8ff"},
-            {"tier": "Epic", "count": 6, "percent": 0.6, "color": "#c990ff"},
-            {"tier": "1 of 1", "count": 4, "percent": 0.4, "color": "#f0bf54"},
+        'collectionVersion': 'Final Collection 6', 'totalSupply': len(records),
+        'previewCount': len(records),
+        'distribution': [
+            {'tier': 'Standard', 'count': 1990, 'percent': 99.5, 'color': '#d8e3dc'},
+            {'tier': '1 of 1', 'count': 10, 'percent': 0.5, 'color': '#f0bf54'},
         ],
-        "items": records,
+        'items': records,
     }
-    (PROJECT / "public" / "collection.json").write_text(
-        json.dumps(payload, indent=2) + "\n", encoding="utf-8"
-    )
-    print(f"Prepared all {len(records)} collection records in {OUTPUT}")
+    (PROJECT / 'public/collection.json').write_text(json.dumps(payload, indent=2) + '\n')
+    total_bytes = sum(p.stat().st_size for p in output.glob('*.webp'))
+    print(f'Prepared {len(records)} verified transparent previews; {total_bytes / 1e6:.1f} MB total.', flush=True)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
