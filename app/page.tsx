@@ -43,7 +43,7 @@ type CollectionData = {
 
 const collection = collectionPayload as CollectionData;
 const featuredNumbers = [
-  '1400',
+  '0001',
   '0008',
   '0071',
   '0194',
@@ -51,6 +51,7 @@ const featuredNumbers = [
   '0023',
   '0400',
   '0510',
+  '1400',
 ] as const;
 const featuredOrder = new Map<string, number>(
   featuredNumbers.map((number, index) => [number, index]),
@@ -667,9 +668,9 @@ export default function Home() {
 
         <section className="edition-signoff">
           <Image
-            src="/collection/final6/0510.webp"
+            src="/collection/final6/2000.webp"
             unoptimized
-            alt="Wally leader No. 0510"
+            alt="Wall Street Bets, Wally one-of-one No. 2000"
             width={600}
             height={600}
             sizes="(max-width: 760px) 80vw, 38vw"

@@ -11,6 +11,7 @@ export function BroadcastIntro() {
   const skipButtonRef = useRef<HTMLButtonElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const exitTimerRef = useRef<number | null>(null);
+  const finishRequestedRef = useRef(false);
   const [phase, setPhase] = useState<Phase>('static');
   const [departed, setDeparted] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -25,7 +26,8 @@ export function BroadcastIntro() {
   }, []);
 
   const finishBroadcast = useCallback(() => {
-    if (exitTimerRef.current) return;
+    if (finishRequestedRef.current) return;
+    finishRequestedRef.current = true;
     videoRef.current?.pause();
     setPlaying(false);
     setPhase('leaving');
@@ -44,6 +46,7 @@ export function BroadcastIntro() {
     ).matches;
     const tuneTimer = window.setTimeout(
       () => {
+        if (finishRequestedRef.current) return;
         if (reducedMotion) completeExit();
         else setPhase('broadcast');
       },
@@ -175,6 +178,12 @@ export function BroadcastIntro() {
       </div>
 
       <div className="tv-photo-stage">
+        <button
+          type="button"
+          className="tv-skip-target"
+          aria-label="Skip intro and open today’s edition"
+          onClick={finishBroadcast}
+        />
         <Image
           className="tv-photo-frame tv-photo-frame-desktop"
           src="/media/vintage-tv-frame.png"

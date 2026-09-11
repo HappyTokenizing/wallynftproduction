@@ -152,13 +152,14 @@ html {
 
 .edition-index {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   border-bottom: 4px double var(--news-ink);
 }
 
 .edition-index a {
   position: relative;
-  min-height: 72px;
+  min-height: 92px;
+  min-width: 0;
   display: grid;
   align-content: center;
   gap: 1px;
@@ -183,15 +184,17 @@ html {
 .edition-index span,
 .edition-index small {
   font-family: var(--label);
-  font-size: 5px;
-  letter-spacing: 0.12em;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
 .edition-index strong {
   font-family: var(--headline);
-  font-size: 17px;
-  line-height: 1;
+  font-size: 21px;
+  line-height: 1.05;
+  text-wrap: balance;
 }
 
 .front-headline {
@@ -791,12 +794,20 @@ html {
   }
 
   .edition-index {
-    grid-template-columns: repeat(5, minmax(128px, 1fr));
-    overflow-x: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .edition-index a {
-    min-height: 64px;
+    min-height: 88px;
+    border-top: 1px solid rgba(13, 13, 12, 0.45);
+  }
+
+  .edition-index a:nth-child(-n + 2) {
+    border-top: 0;
+  }
+
+  .edition-index a:nth-child(2n + 1) {
+    border-left: 0;
   }
 
   .front-portrait,
@@ -871,6 +882,33 @@ html {
 }
 
 @media (min-width: 701px) and (max-width: 980px) {
+  .newspaper-masthead {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding-block: 24px;
+  }
+
+  .newspaper-masthead h1 {
+    font-size: clamp(58px, 8vw, 78px);
+  }
+
+  .newspaper-masthead p {
+    max-width: none;
+    font-size: 14px;
+  }
+
+  .edition-index {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .edition-index a:nth-child(n + 4) {
+    border-top: 1px solid rgba(13, 13, 12, 0.45);
+  }
+
+  .edition-index a:nth-child(3n + 1) {
+    border-left: 0;
+  }
+
   .front-grid {
     grid-template-columns: minmax(340px, 1.15fr) minmax(260px, 0.85fr);
   }
@@ -1302,18 +1340,6 @@ html {
   .newspaper-masthead p {
     font-size: 14px;
     line-height: 1.2;
-  }
-
-  .edition-index {
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-    mask-image: linear-gradient(to right, #000 90%, transparent);
-  }
-
-  .edition-index a {
-    min-height: 72px;
-    scroll-snap-align: start;
   }
 
   .edition-index span,
