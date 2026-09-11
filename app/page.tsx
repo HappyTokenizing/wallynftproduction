@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
 import { BroadcastIntro } from '@/components/broadcast-intro';
+import { CollectionRarity } from '@/components/collection-rarity';
 import { NewsletterPopup } from '@/components/newsletter-popup';
 import { NewsletterSignup } from '@/components/newsletter-signup';
 import {
@@ -119,6 +120,7 @@ export default function Home() {
     'featured',
   );
   const [visibleCount, setVisibleCount] = useState(8);
+  const [hasExpandedCollection, setHasExpandedCollection] = useState(false);
   const [signalOpen, setSignalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('story');
   const [replaySignal, setReplaySignal] = useState(0);
@@ -238,7 +240,7 @@ export default function Home() {
           <div className="front-headline">
             <p>BREAKING NEWS!</p>
             <h2 id="front-page-title">
-              Wally rallies 2,000 NFT holders for a fair onchain world.
+              Wally rallies 2,000 pioneers for a fair onchain world.
             </h2>
             <strong>
               A mission driven collection carries real world value into a more
@@ -472,6 +474,8 @@ export default function Home() {
             </output>
           </div>
 
+          <CollectionRarity items={collection.items} />
+
           <div className="edition-grid">
             {filteredItems.slice(0, visibleCount).map((item) => (
               <article className="edition-card" key={item.number}>
@@ -516,15 +520,55 @@ export default function Home() {
             )}
           </div>
 
-          {visibleCount < filteredItems.length && (
-            <button
-              type="button"
-              className="edition-more"
-              onClick={() => setVisibleCount((count) => count + 8)}
-            >
-              Show more leaders
-            </button>
-          )}
+          <div className="collection-pagination">
+            <p aria-live="polite" aria-atomic="true">
+              Showing {Math.min(visibleCount, filteredItems.length)} of{' '}
+              {filteredItems.length.toLocaleString()} leaders
+            </p>
+            {visibleCount < filteredItems.length &&
+              (hasExpandedCollection ? (
+                <div
+                  className="collection-load-options"
+                  aria-label="Load more leaders"
+                >
+                  {[20, 120]
+                    .filter(
+                      (amount) =>
+                        amount === 20 ||
+                        filteredItems.length - visibleCount > 20,
+                    )
+                    .map((amount) => (
+                      <button
+                        type="button"
+                        className="edition-more"
+                        key={amount}
+                        onClick={() =>
+                          setVisibleCount((count) =>
+                            Math.min(count + amount, filteredItems.length),
+                          )
+                        }
+                      >
+                        Show{' '}
+                        {Math.min(amount, filteredItems.length - visibleCount)}{' '}
+                        more leaders
+                      </button>
+                    ))}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="edition-more"
+                  onClick={() => {
+                    setVisibleCount((count) =>
+                      Math.min(count + 8, filteredItems.length),
+                    );
+                    setHasExpandedCollection(true);
+                  }}
+                >
+                  Show more leaders
+                </button>
+              ))}
+          </div>
           <a className="page-turn" href="#benefits">
             Discover the NFT benefits <span aria-hidden="true">→</span>
           </a>

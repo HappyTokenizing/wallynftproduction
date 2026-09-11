@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "oxlint app/page.tsx app/layout.tsx app/api/subscribe/route.ts components/broadcast-intro.tsx components/newsletter-popup.tsx components/newsletter-signup.tsx components/ui/dialog.tsx components/ui/button.tsx lib/utils.ts",
+    "lint": "oxlint app/page.tsx app/layout.tsx app/api/subscribe/route.ts components/broadcast-intro.tsx components/collection-rarity.tsx components/newsletter-popup.tsx components/newsletter-signup.tsx components/ui/dialog.tsx components/ui/button.tsx lib/utils.ts",
     "format": "oxfmt"
   },
   "dependencies": {

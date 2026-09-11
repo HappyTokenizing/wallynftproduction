@@ -1646,3 +1646,154 @@ html {
 @media (max-width: 390px) {
   .benefits-edition { width: calc(100% - 20px); }
 }
+
+
+/* Collection reference drawer and progressive gallery loading. */
+.collection-rarity {
+  margin: 14px 0 26px;
+  border-bottom: 1px solid var(--news-ink);
+}
+.collection-rarity summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(100%, 300px);
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--news-ink);
+  border-bottom: 0;
+  list-style: none;
+  cursor: pointer;
+  font-family: var(--label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.collection-rarity summary::-webkit-details-marker {
+  display: none;
+}
+.collection-rarity summary:hover,
+.collection-rarity[open] summary {
+  background: var(--news-ink);
+  color: var(--paper-light);
+}
+.collection-rarity summary:focus-visible,
+.rarity-scroll:focus-visible {
+  outline: 2px solid var(--news-ink);
+  outline-offset: 3px;
+}
+.rarity-toggle::after {
+  content: '+';
+  font-size: 22px;
+  line-height: 1;
+}
+.collection-rarity[open] .rarity-toggle::after {
+  content: '−';
+}
+.rarity-panel {
+  padding: 22px 0;
+  border-top: 1px solid var(--news-ink);
+}
+.rarity-intro {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.rarity-intro h3 {
+  margin: 0 0 8px;
+  font-family: var(--headline);
+  font-size: 30px;
+  line-height: 1.1;
+}
+.rarity-intro p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.rarity-editions {
+  flex-shrink: 0;
+  text-align: right;
+}
+.rarity-editions strong,
+.rarity-editions span {
+  display: block;
+}
+.rarity-categories {
+  margin-bottom: 12px;
+}
+.rarity-scroll {
+  max-height: 340px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.rarity-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.rarity-scroll caption {
+  text-align: left;
+  padding: 8px 12px 14px;
+  font-style: italic;
+}
+.rarity-scroll th,
+.rarity-scroll td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #0d0d0c33;
+  text-align: right;
+}
+.rarity-scroll th:first-child {
+  text-align: left;
+}
+.rarity-scroll tbody th {
+  font-weight: 400;
+}
+.rarity-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--paper-light);
+  font-family: var(--label);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.collection-pagination {
+  margin-top: 22px;
+}
+.collection-pagination > p {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 14px;
+}
+.collection-load-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.collection-pagination .edition-more {
+  margin: 0;
+  min-height: 48px;
+}
+@media (max-width: 600px) {
+  .rarity-intro {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .rarity-editions {
+    text-align: left;
+  }
+  .rarity-scroll th,
+  .rarity-scroll td {
+    padding: 10px 8px;
+  }
+  .rarity-scroll table {
+    font-size: 14px;
+  }
+  .collection-load-options {
+    gap: 8px;
+  }
+}
