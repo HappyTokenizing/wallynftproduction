@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SiteAnalytics } from '@/components/site-analytics';
 import '@fontsource/newsreader/latin-400.css';
 import '@fontsource/newsreader/latin-600.css';
 import '@fontsource/newsreader/latin-400-italic.css';
@@ -47,7 +48,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        {process.env.VERCEL_ENV === 'production' && <SiteAnalytics />}
+      </body>
     </html>
   );
 }
