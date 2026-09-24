@@ -712,7 +712,7 @@ export default function Home() {
 
         <section className="edition-signoff">
           <Image
-            src="/collection/final6/2000.webp"
+            src="/collection/final6-20260922/2000.webp"
             unoptimized
             alt="Wall Street Bets, Wally one-of-one No. 2000"
             width={600}
